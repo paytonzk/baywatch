@@ -17,19 +17,46 @@ const app = {
   makeFav(ev){
     ev.preventDefault()
     const f = ev.target
-    f.style.backgroundColor = 'yellow'
+    if(f.innerText === 'Favorite'){
+        f.style.backgroundColor = 'white'
+        f.innerText = 'Favorite?'
+    }
+    else{
+        f.innerText = 'Favorite'
+        f.style.backgroundColor = 'yellow'
+    }
+
+  },
+
+  remove(ev){
+    ev.preventDefault()
+    const list = document.getElementById('flick-list')
+    list.removeChild(this.flick)
+    const pos = this.flicks.indexOf(this.flick)
+    this.flicks.splice(pos, 1)
   },
 
   renderListItem(flick) {
     const item = document.createElement('li')
     item.textContent = flick.name
-    const buttonForm = document.createElement('form')
+
+    const favForm = document.createElement('form')
+
     const favButt = document.createElement('button')
     favButt.type = 'submit'
-    favButt.innerText= 'favorite'
+    favButt.innerText= 'Favorite?'
     favButt.addEventListener('click', this.makeFav.bind(this))
-    buttonForm.appendChild(favButt)
-    item.appendChild(buttonForm)
+
+    favForm.appendChild(favButt)
+
+    const remButt = document.createElement('button')
+    remButt.type = 'submit'
+    remButt.innerText= 'Remove?'
+    remButt.addEventListener('click', this.remove.bind(this))
+
+    favForm.appendChild(remButt)
+
+    item.appendChild(favForm)
     return item
   },
 
