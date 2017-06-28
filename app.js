@@ -15,18 +15,21 @@ const app = {
   },
 
   makeFav(ev){
-    ev.target.style.backgroundColor = 'yellow'
+    ev.preventDefault()
+    const f = ev.target
+    f.style.backgroundColor = 'yellow'
   },
 
   renderListItem(flick) {
     const item = document.createElement('li')
     item.textContent = flick.name
+    const buttonForm = document.createElement('form')
     const favButt = document.createElement('button')
     favButt.type = 'submit'
     favButt.innerText= 'favorite'
-    favButt.addEventListener('submit', this.makeFav.bind(this))
-    item.appendChild(favButt)
-    
+    favButt.addEventListener('click', this.makeFav.bind(this))
+    buttonForm.appendChild(favButt)
+    item.appendChild(buttonForm)
     return item
   },
 
