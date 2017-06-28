@@ -1,17 +1,17 @@
 const app = {
-    init: function(selectors){
+    init(selectors){
         this.max = 1
         this.list = document.querySelector(selectors.listSelector)
         document.querySelector(selectors.formSelector).addEventListener('submit', this.handleSubmit.bind(this))
     },
 
-    renderListItem: function(flick){
+    renderListItem(flick){
         const item = document.createElement('li')
         item.tectContent = flick.name
         return item
     },
 
-    handleSubmit: function(ev){
+    handleSubmit(ev){
         ev.preventDefault()
         const f = ev.target
         const flick ={
