@@ -81,6 +81,10 @@ const app = {
     upButt.addEventListener('click', this.goUp.bind(this))
 
     favForm.appendChild(upButt)
+    //breaks code currently
+    // if(isTop(item)){
+    //   upButt.backgroundColor = 'black'
+    // }
 
     const downButt = document.createElement('button')
     downButt.type = 'submit'
@@ -89,12 +93,28 @@ const app = {
     downButt.addEventListener('click', this.goDown.bind(this))
 
     favForm.appendChild(downButt)
+    //breaks code currently
+    // if(isBottom(item)){
+    //   downButt.backgroundColor = 'black'
+    // }
 
     item.appendChild(favForm)
     return item
   },
 
-  
+  isTop(flick){
+    if(this.flicks.indexOf(flick) == 0){
+      return true;
+    }
+    return false;
+  },
+
+  isBottom(){
+    if(this.flicks.indexOf(flick) == this.flicks.length - 1){
+      return true;
+    }
+    return false;
+  },
 
   handleSubmit(ev) {
     ev.preventDefault()
