@@ -1,3 +1,5 @@
+
+
 const app = {
   init(selectors) {
     this.flicks = []
@@ -12,11 +14,23 @@ const app = {
       )
   },
 
+  makeFav(ev){
+    ev.target.style.backgroundColor = 'yellow'
+  },
+
   renderListItem(flick) {
     const item = document.createElement('li')
     item.textContent = flick.name
+    const favButt = document.createElement('button')
+    favButt.type = 'submit'
+    favButt.innerText= 'favorite'
+    favButt.addEventListener('submit', this.makeFav.bind(this))
+    item.appendChild(favButt)
+    
     return item
   },
+
+  
 
   handleSubmit(ev) {
     ev.preventDefault()
@@ -28,7 +42,6 @@ const app = {
 
     const listItem = this.renderListItem(flick)
     this.flicks.push(flick)
-    console.log(this.flicks)
     this.list.appendChild(listItem)
 
     this.max ++
