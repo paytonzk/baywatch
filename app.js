@@ -19,7 +19,7 @@ const app = {
     const f = ev.target
     //For the toggling
     if(f.innerText === 'Favorite'){
-        f.style.backgroundColor = 'white'
+        f.style.backgroundColor = 'dimgray'
         f.innerText = 'Favorite?'
     }
     else{
