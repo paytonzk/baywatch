@@ -29,6 +29,14 @@ const app = {
 
   },
 
+  goUp(ev){
+    ev.preventDefault()
+  },
+
+  goDown(ev){
+    ev.preventDefault()
+  },
+
   remove(ev){
     ev.preventDefault()
     const button = ev.target
@@ -65,6 +73,22 @@ const app = {
     remButt.addEventListener('click', this.remove.bind(this))
 
     favForm.appendChild(remButt)
+
+    const upButt = document.createElement('button')
+    upButt.type = 'submit'
+    upButt.classList.add('up-button')
+    upButt.innerText= 'Up?'
+    upButt.addEventListener('click', this.goUp.bind(this))
+
+    favForm.appendChild(upButt)
+
+    const downButt = document.createElement('button')
+    downButt.type = 'submit'
+    downButt.classList.add('down-button')
+    downButt.innerText= 'Down?'
+    downButt.addEventListener('click', this.goDown.bind(this))
+
+    favForm.appendChild(downButt)
 
     item.appendChild(favForm)
     return item
