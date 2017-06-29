@@ -30,9 +30,16 @@ const app = {
 
   remove(ev){
     ev.preventDefault()
+    const button = ev.target
+    const listItem = button.parentNode.parentNode
     const list = document.getElementById('flick-list')
-    list.removeChild(this.flick)
-    const pos = this.flicks.indexOf(this.flick)
+    try{
+      list.removeChild(listItem)
+    }
+    catch(e){
+      console.log(list)
+    }
+    const pos = this.flicks.indexOf(listItem)
     this.flicks.splice(pos, 1)
   },
 
@@ -44,6 +51,7 @@ const app = {
 
     const favButt = document.createElement('button')
     favButt.type = 'submit'
+    favButt.classList.add('fav-button')
     favButt.innerText= 'Favorite?'
     favButt.addEventListener('click', this.makeFav.bind(this))
 
@@ -51,6 +59,7 @@ const app = {
 
     const remButt = document.createElement('button')
     remButt.type = 'submit'
+    remButt.classList.add('rem-button')
     remButt.innerText= 'Remove?'
     remButt.addEventListener('click', this.remove.bind(this))
 
