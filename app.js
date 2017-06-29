@@ -17,6 +17,7 @@ const app = {
   makeFav(ev){
     ev.preventDefault()
     const f = ev.target
+    //For the toggling
     if(f.innerText === 'Favorite'){
         f.style.backgroundColor = 'white'
         f.innerText = 'Favorite?'
