@@ -1,10 +1,10 @@
-
-
 const app = {
   init(selectors) {
+    this.myStorage = localStorage
     this.flicks = []
     this.max = 1
     this.list = document.querySelector(selectors.listSelector)
+    this.template = document.querySelector(selectors.templateSelector)
 
     document
       .querySelector(selectors.formSelector)
@@ -14,106 +14,87 @@ const app = {
       )
   },
 
-  makeFav(ev){
-    ev.preventDefault()
-    const f = ev.target
-    //For the toggling
-    if(f.innerText === 'Favorite'){
-        f.style.backgroundColor = 'dimgray'
-        f.innerText = 'Favorite?'
-    }
-    else{
-        f.innerText = 'Favorite'
-        f.style.backgroundColor = 'yellow'
-    }
+  favFlick(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+    flick.fav = !flick.fav
 
+    if (flick.fav) {
+      listItem.classList.add('fav')
+    } else {
+      listItem.classList.remove('fav')
+    }
   },
 
-  goUp(ev){
-    ev.preventDefault()
+  removeFlick(flick, ev) {
+    const listItem = ev.target.closest('.flick')
+    listItem.remove()
+
+    const i = this.flicks.indexOf(flick)
+    this.flicks.splice(i, 1)
   },
 
-  goDown(ev){
-    ev.preventDefault()
+  upFlick(flick, ev){
+    const li = ev.target.parentNode.parentNode
+    if(li.previousElementSibling === null){
+      return;
+    }
+    this.list.insertBefore(li, li.previousElementSibling)
+    const pos = this.flicks.indexOf(flick)
+    const temp = this.flicks[pos]
+    this.flicks[pos] = this.flicks[pos - 1]
+    this.flicks[pos - 1] = temp
   },
 
-  remove(ev){
-    ev.preventDefault()
-    const button = ev.target
-    const listItem = button.parentNode.parentNode
-    const list = document.getElementById('flick-list')
-    try{
-      list.removeChild(listItem)
+  downFlick(flick, ev){
+    const li = ev.target.parentNode.parentNode
+    if(li.nextElementSibling === null){
+      return
     }
-    catch(e){
-      console.log(list)
-    }
-    const pos = this.flicks.indexOf(listItem)
-    this.flicks.splice(pos, 1)
+    const nextSibling = li.nextElementSibling
+    this.list.insertBefore(nextSibling, li)
+    const pos = this.flicks.indexOf(flick)
+    const temp = this.flicks[pos]
+    this.flicks[pos] = this.flicks[pos + 1]
+    this.flicks[pos + 1] = temp
   },
 
   renderListItem(flick) {
-    const item = document.createElement('li')
-    item.textContent = flick.name
+    const item = this.template.cloneNode(true)
+    item.classList.remove('template')
+    item.dataset.id = flick.id
+    item
+      .querySelector('.flick-name')
+      .textContent = flick.name
 
-    const favForm = document.createElement('form')
+    item
+      .querySelector('button.remove')
+      .addEventListener(
+        'click', 
+        this.removeFlick.bind(this, flick)
+      )
 
-    const favButt = document.createElement('button')
-    favButt.type = 'submit'
-    favButt.classList.add('fav-button')
-    favButt.innerText= 'Favorite?'
-    favButt.addEventListener('click', this.makeFav.bind(this))
+    item
+      .querySelector('button.fav')
+      .addEventListener(
+        'click', 
+        this.favFlick.bind(this, flick)
+      )
 
-    favForm.appendChild(favButt)
+      item
+      .querySelector('button.up')
+      .addEventListener(
+        'click', 
+        this.upFlick.bind(this, flick)
+      )
 
-    const remButt = document.createElement('button')
-    remButt.type = 'submit'
-    remButt.classList.add('rem-button')
-    remButt.innerText= 'Remove?'
-    remButt.addEventListener('click', this.remove.bind(this))
-
-    favForm.appendChild(remButt)
-
-    const upButt = document.createElement('button')
-    upButt.type = 'submit'
-    upButt.classList.add('up-button')
-    upButt.innerText= 'Up?'
-    upButt.addEventListener('click', this.goUp.bind(this))
-
-    favForm.appendChild(upButt)
-    //breaks code currently
-    // if(isTop(item)){
-    //   upButt.backgroundColor = 'black'
-    // }
-
-    const downButt = document.createElement('button')
-    downButt.type = 'submit'
-    downButt.classList.add('down-button')
-    downButt.innerText= 'Down?'
-    downButt.addEventListener('click', this.goDown.bind(this))
-
-    favForm.appendChild(downButt)
-    //breaks code currently
-    // if(isBottom(item)){
-    //   downButt.backgroundColor = 'black'
-    // }
-
-    item.appendChild(favForm)
+      item
+      .querySelector('button.down')
+      .addEventListener(
+        'click', 
+        this.downFlick.bind(this, flick)
+      )
+    
     return item
-  },
-
-  isTop(flick){
-    if(this.flicks.indexOf(flick) == 0){
-      return true;
-    }
-    return false;
-  },
-
-  isBottom(){
-    if(this.flicks.indexOf(flick) == this.flicks.length - 1){
-      return true;
-    }
-    return false;
   },
 
   handleSubmit(ev) {
@@ -122,18 +103,37 @@ const app = {
     const flick = {
       id: this.max,
       name: f.flickName.value,
+      fav: false,
     }
 
+    this.flicks.unshift(flick)
+
     const listItem = this.renderListItem(flick)
-    this.flicks.push(flick)
-    this.list.appendChild(listItem)
+    localStorage.setItem(this.max, listItem)
+    this.list
+      .insertBefore(listItem, this.list.firstElementChild)
 
     this.max ++
     f.reset()
+  },
+
+  search(){
+    const input = document.getElementById('myInput')
+    const filter = input.value.toUpperCase()
+    const items = this.list.getElementsByTagName('li')
+    for (i = 0; i < items.length; i++) {
+        a = items[i];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            items[i].style.display = ""
+        } else {
+            items[i].style.display = "none"
+        }
+    }
   },
 }
 
 app.init({
   formSelector: 'form#flick-form',
   listSelector: '#flick-list',
+  templateSelector: '.flick.template',
 })
