@@ -107,6 +107,20 @@ const app = {
     this.max ++
     f.reset()
   },
+
+  search(){
+    const input = document.getElementById('myInput')
+    const filter = input.value.toUpperCase()
+    const items = this.list.getElementsByTagName('li')
+    for (i = 0; i < items.length; i++) {
+        a = items[i];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            items[i].style.display = ""
+        } else {
+            items[i].style.display = "none"
+        }
+    }
+  },
 }
 
 app.init({
