@@ -33,22 +33,21 @@ const app = {
   },
 
   upFlick(flick, ev){
-    if(flick.previousElementSibling === null){
+    if(ev.target.parentNode.previousElementSibling === null){
       return;
     }
-    const f = ev.target
-    f.parentNode.insertBefore(f, f.previousElementSibling)
-    const pos = this.flicks.indexOf(f)
+    this.list.insertBefore(ev.target.parentNode, ev.target.parentNode.previousElementSibling)
+    const pos = this.flicks.indexOf(flick)
     const temp = this.flicks[pos]
     this.flicks[pos] = this.flicks[pos - 1]
     this.flicks[pos - 1] = temp
   },
 
   downFlick(flick, ev){
-    if(flick.nextSibling === null){
+    if(ev.target.parentNode.nextElementSibling === null){
       return
     }
-    upFlick(flick.nextSibling, ev)
+    upFlick(ev.target.parentNode.nextElementSibling, ev)
   },
 
   renderListItem(flick) {
