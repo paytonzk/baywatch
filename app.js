@@ -45,10 +45,16 @@ const app = {
   },
 
   downFlick(flick, ev){
-    if(ev.target.parentNode.parentNode.nextElementSibling === null){
+    const li = ev.target.parentNode.parentNode
+    if(li.nextElementSibling === null){
       return
     }
-    this.upFlick.bind(this, ev.target.parentNode.parentNode.nextElementSibling)
+    const nextSibling = li.nextElementSibling
+    this.list.insertBefore(nextSibling, li)
+    const pos = this.flicks.indexOf(flick)
+    const temp = this.flicks[pos]
+    this.flicks[pos] = this.flicks[pos + 1]
+    this.flicks[pos + 1] = temp
   },
 
   renderListItem(flick) {
