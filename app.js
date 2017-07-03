@@ -1,7 +1,8 @@
 const app = {
   init(selectors) {
+    this.myStorage = localStorage
     this.flicks = []
-    this.max = 0
+    this.max = 1
     this.list = document.querySelector(selectors.listSelector)
     this.template = document.querySelector(selectors.templateSelector)
 
@@ -100,7 +101,7 @@ const app = {
     ev.preventDefault()
     const f = ev.target
     const flick = {
-      id: this.max + 1,
+      id: this.max,
       name: f.flickName.value,
       fav: false,
     }
@@ -108,6 +109,7 @@ const app = {
     this.flicks.unshift(flick)
 
     const listItem = this.renderListItem(flick)
+    localStorage.setItem(this.max, listItem)
     this.list
       .insertBefore(listItem, this.list.firstElementChild)
 
